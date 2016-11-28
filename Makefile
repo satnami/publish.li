@@ -8,7 +8,7 @@ build: fmt
 	gb build all
 
 publish: build
-	./bin/publish
+	PORT=9896 ./bin/publish
 
 test:
 	gb test -v

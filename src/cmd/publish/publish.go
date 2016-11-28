@@ -17,10 +17,43 @@
 
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"html"
+	"log"
+	"net/http"
+	"os"
+)
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Path
+	log.Printf("path=%s\n", path)
+
+	if path == "/" {
+		log.Printf("here\n")
+		// serve the homepage
+		http.ServeFile(w, r, "./static/index.html")
+	} else if path == "/favicon.ico" {
+		http.ServeFile(w, r, "static/favicon.ico")
+	} else {
+		// everything else
+		fmt.Fprintf(w, "Page=%q\n", html.EscapeString(r.URL.Path))
+	}
+}
 
 func main() {
-	fmt.Println("Hello, World!")
+	// set up the static file server
+	static := http.FileServer(http.Dir("static"))
+
+	// use the default mux
+	http.Handle("/s/", static)
+	http.HandleFunc("/", handler)
+
+	// the server
+	port := os.Getenv("PORT")
+	log.Printf("Listening on port %s ...\n", port)
+	err := http.ListenAndServe(":"+port, nil)
+	log.Fatal(err)
 }
 
 // --------------------------------------------------------------------------------------------------------------------

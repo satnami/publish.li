@@ -17,6 +17,4 @@ This project is free software and can be forked, downloaded, used, and shared.
 
 [AGPLv3](https://www.gnu.org/licenses/agpl-3.0.txt).
 
-...
-
 (Ends)
