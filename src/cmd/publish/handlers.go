@@ -21,8 +21,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"html"
+	"html/template"
 	"log"
 	"net/http"
 	"strings"
@@ -31,6 +31,23 @@ import (
 	"github.com/Machiel/slugify"
 	"github.com/boltdb/bolt"
 )
+
+var tmpl *template.Template
+
+func init() {
+	tmpl1, err := template.ParseGlob("./templates/*.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	tmpl = tmpl1
+}
+
+func render(w http.ResponseWriter, templateName string, data interface{}) {
+	err := tmpl.ExecuteTemplate(w, templateName, data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
 
 func apiPut(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -48,10 +65,9 @@ func apiPut(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 
 		// check that the title has something in it (other than whitespace)
 		rawTitle := page.Title
-		replacer := strings.NewReplacer(" ", "", "\t", "", "\n", "", "\f", "")
-		page.Title = replacer.Replace(rawTitle)
 
-		if page.Title == "" {
+		slug := slugify.Slugify(rawTitle)
+		if slug == "" {
 			sendError(w, "Provide a title")
 			return
 		}
@@ -59,7 +75,7 @@ func apiPut(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 		// fill in the other fields to save this page
 		now := time.Now()
 		page.Id = randStr(16)
-		page.Name = slugify.Slugify(rawTitle) + "-" + randStr(8)
+		page.Name = slug + "-" + randStr(8)
 		page.Inserted = now
 		page.Updated = now
 
@@ -255,7 +271,7 @@ func servePage(w http.ResponseWriter, r *http.Request, db *bolt.DB) {
 	}
 
 	// serve the page
-	fmt.Fprintf(w, "Page : %v, %v, %v\n", page.Id, page.Name, page.Title)
+	render(w, "page.html", page)
 }
 
 func homeHandler(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {

@@ -57,6 +57,7 @@ var app = new Vue({
         function(err) {
           console.log(err)
           app.err = 'Error saving article. Please try again later.'
+          app.state = 'editing'
         }
       )
     },
@@ -101,6 +102,7 @@ var app = new Vue({
         function(err) {
           console.log(err)
           app.err = 'Error saving article. Please try again later.'
+          app.state = 'editing'
         }
       )
     },
