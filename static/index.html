@@ -74,19 +74,23 @@
     <section class="section">
       <div id="app" class="container">
         <p class="control has-icon has-icon-right">
-          <input class="input is-large" name="title" type="text" placeholder="Title" v-bind:value="title">
+          <input class="input is-large" type="text" placeholder="Title" v-model="title">
           <i class="fa fa-quote-right"></i>
         </p>
         <p class="control has-icon has-icon-right">
-          <input class="input is-medium" name="author" type="text" placeholder="Author" v-bind:value="author">
+          <input class="input is-medium" type="text" placeholder="Author" v-model="author">
           <i class="fa fa-user"></i>
         </p>
         <p class="control has-icon has-icon-right">
-          <textarea class="textarea is-medium" name="content" placeholder="Write your article ..." style="height: 400px;">{{ content }}</textarea>
-          <i class="fa fa-pencil"></i>
+          <textarea
+            class="textarea is-medium content"
+            placeholder="Write your article ..."
+            v-model="content"
+          ></textarea>
+          <i class="fa fa-pencil" style="font-size: 21px; right: 8px; top: 8px;"></i>
         </p>
         <p class="control">
-          <button class="button is-success is-medium">
+          <button class="button is-success is-medium" v-on:click="onSave">
             Publish
           </button>
         </p>
@@ -114,6 +118,7 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.3/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.3/axios.min.js"></script>
     <script src="/s/js/app.js"></script>
   </body>
 </html>

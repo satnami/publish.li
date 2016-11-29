@@ -1,5 +1,7 @@
 # publish.li #
 
+"Publish your posts with ease."
+
 A simple publishing site much like [Medium](http://medium.com/) or [telegra.ph](http://telegra.ph/). You don't need to
 sign up or log in - just type your post and hit publish!
 
