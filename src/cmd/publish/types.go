@@ -17,44 +17,14 @@
 
 package main
 
-import (
-	"log"
-	"net/http"
-	"os"
-	"time"
+import "time"
 
-	"github.com/boltdb/bolt"
-)
-
-func check(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func main() {
-	// open the db
-	db, errOpen := bolt.Open("publish.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
-	check(errOpen)
-	defer db.Close()
-
-	errUpdate := db.Update(func(tx *bolt.Tx) error {
-		_, err := tx.CreateBucketIfNotExists(pagesBucket)
-		return err
-	})
-	check(errUpdate)
-
-	// set up the static file server
-	static := http.FileServer(http.Dir("static"))
-
-	// use the default mux
-	http.HandleFunc("/api", apiHandler(db))
-	http.Handle("/s/", static)
-	http.HandleFunc("/", homeHandler(db))
-
-	// the server
-	port := os.Getenv("PORT")
-	log.Printf("Listening on port %s ...\n", port)
-	errListen := http.ListenAndServe(":"+port, nil)
-	log.Fatal(errListen)
+type Page struct {
+	Id       string    `json:"id"`       // e.g. "aoAAhc5i4bmKMSZk"
+	Name     string    `json:"name"`     // e.g. "first-post-chzc9BkU
+	Title    string    `json:"title"`    // e.g. "First Post"
+	Author   string    `json:"author"`   // e.g. "Andrew Chilton"
+	Content  string    `json:"content"`  // e.g. "My story."
+	Inserted time.Time `json:"inserted"` // i.e. The inserted time
+	Updated  time.Time `json:"updated"`  // i.e. The updated time
 }

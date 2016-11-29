@@ -1,5 +1,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 //
+// This file is part of https://github.com/appsattic/publish.li
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -18,43 +20,38 @@
 package main
 
 import (
-	"log"
+	"encoding/json"
+	"math/rand"
 	"net/http"
-	"os"
-	"time"
-
-	"github.com/boltdb/bolt"
 )
 
-func check(err error) {
-	if err != nil {
-		log.Fatal(err)
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const lenLetters = len(letterBytes)
+
+func randStr(n int) string {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letterBytes[rand.Int63()%int64(len(letterBytes))]
 	}
+	return string(b)
 }
 
-func main() {
-	// open the db
-	db, errOpen := bolt.Open("publish.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
-	check(errOpen)
-	defer db.Close()
+func sendJson(w http.ResponseWriter, data interface{}) {
+	json.NewEncoder(w).Encode(data)
+}
 
-	errUpdate := db.Update(func(tx *bolt.Tx) error {
-		_, err := tx.CreateBucketIfNotExists(pagesBucket)
-		return err
-	})
-	check(errUpdate)
+func sendOk(w http.ResponseWriter, data interface{}) {
+	json.NewEncoder(w).Encode(data)
+}
 
-	// set up the static file server
-	static := http.FileServer(http.Dir("static"))
+func sendError(w http.ResponseWriter, msg string) {
+	data := struct {
+		Ok  bool   `json:"ok"`
+		Msg string `json:"msg"`
+	}{
+		Ok:  false,
+		Msg: msg,
+	}
 
-	// use the default mux
-	http.HandleFunc("/api", apiHandler(db))
-	http.Handle("/s/", static)
-	http.HandleFunc("/", homeHandler(db))
-
-	// the server
-	port := os.Getenv("PORT")
-	log.Printf("Listening on port %s ...\n", port)
-	errListen := http.ListenAndServe(":"+port, nil)
-	log.Fatal(errListen)
+	sendJson(w, data)
 }

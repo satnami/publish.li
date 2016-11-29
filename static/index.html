@@ -73,6 +73,17 @@
 
     <section class="section">
       <div id="app" class="container">
+
+        <article v-if="err" class="message is-danger">
+          <div class="message-header">
+            Error
+          </div>
+          <div class="message-body">{{ err }}</div>
+        </article>
+
+        <p v-if="id" class="control status">
+          <span>Secret Code : &apos;{{ id }}&apos; - keep this safe so you can re-edit this page.</span>
+        </p>
         <p class="control has-icon has-icon-right">
           <input class="input is-large" type="text" placeholder="Title" v-model="title">
           <i class="fa fa-quote-right"></i>
@@ -83,16 +94,22 @@
         </p>
         <p class="control has-icon has-icon-right">
           <textarea
-            class="textarea is-medium content"
+            id="content"
+            class="textarea is-medium"
             placeholder="Write your article ..."
             v-model="content"
           ></textarea>
           <i class="fa fa-pencil" style="font-size: 21px; right: 8px; top: 8px;"></i>
         </p>
-        <p class="control">
-          <button class="button is-success is-medium" v-on:click="onSave">
+        <p class="control status">
+          <button :class="saveButtonClass" @click="onSave">
             Publish
           </button>
+          <span v-if="url">
+            Page URL :
+            {{ url }}
+            (<a v-if="url" :href="url" target="_blank">Open in New Window</a>)
+          </span>
         </p>
       </div>
     </section>
