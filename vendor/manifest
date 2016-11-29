@@ -2,6 +2,12 @@
 	"version": 0,
 	"dependencies": [
 		{
+			"importpath": "github.com/Machiel/slugify",
+			"repository": "https://github.com/Machiel/slugify",
+			"revision": "9c8f186ad6ea352ad2709ad0ec08f2ecc8a1b424",
+			"branch": "master"
+		},
+		{
 			"importpath": "github.com/boltdb/bolt",
 			"repository": "https://github.com/boltdb/bolt",
 			"revision": "0d9f544bb94aac29c185968483459ef74d6deb5d",
