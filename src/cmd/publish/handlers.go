@@ -192,7 +192,7 @@ func apiGet(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if page == nil {
-			sendError(w, "This page name does not exist.")
+			sendError(w, "This page Id does not exist.")
 			return
 		}
 

@@ -3,16 +3,24 @@
 var app = new Vue({
   el   : '#app',
   data : {
-    id      : null,
-    idLocal : null,
-    name    : null,
-    title   : '',
-    author  : '',
-    content : '',
-    err     : null,
-    state   : 'editing',
+    id        : null,
+    idLocal   : null,
+    name      : null,
+    title     : '',
+    author    : '',
+    content   : '',
+    err       : null,
+    state     : 'editing',
+    isEditing : true,
+    isLoading : false,
   },
-  computed: {
+  watch: {
+    state : function(newState, oldState) {
+      this.isEditing = newState === 'editing'
+      this.isLoading = newState === 'loading'
+    },
+  },
+  computed : {
     url : function() {
       if ( this.name ) {
         return 'https://publish.li/' + this.name
@@ -29,8 +37,8 @@ var app = new Vue({
       return 'button is-success is-medium'
     },
   },
-  methods: {
-    onNew: function() {
+  methods : {
+    onNew : function() {
       app.id = null
       app.idLocal = null
       app.name = null
@@ -40,7 +48,7 @@ var app = new Vue({
       app.err = null
       app.state = 'editing'
     },
-    onLoad: function() {
+    onLoad : function() {
       app.state = 'loading'
       app.err   = null
 
@@ -52,7 +60,6 @@ var app = new Vue({
 
       p.then(
         function (resp) {
-          console.log(resp)
           var data = resp.data
           if ( data.ok ) {
             var payload = data.payload
@@ -70,13 +77,12 @@ var app = new Vue({
           app.state = 'editing'
         },
         function(err) {
-          console.log(err)
           app.err = 'Error loading article. Please try again later.'
           app.state = 'editing'
         }
       )
     },
-    onSave: function() {
+    onSave : function() {
       var method
       var data = {
         title   : app.title,
@@ -102,7 +108,6 @@ var app = new Vue({
       var p = axios[method]('/api', data)
       p.then(
         function (resp) {
-          console.log(resp)
           var data = resp.data
           if ( data.ok ) {
             // save both the `id` and the `name`
@@ -116,7 +121,6 @@ var app = new Vue({
           app.state = 'editing'
         },
         function(err) {
-          console.log(err)
           app.err = 'Error saving article. Please try again later.'
           app.state = 'editing'
         }
