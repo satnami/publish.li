@@ -5,3 +5,8 @@
 #content {
     height: 400px;
 }
+
+.hljs {
+    padding: 16px 20px;
+    margin-bottom: 16px;
+}
