@@ -23,10 +23,15 @@ import (
 	"encoding/json"
 	"math/rand"
 	"net/http"
+	"time"
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 const lenLetters = len(letterBytes)
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 func randStr(n int) string {
 	b := make([]byte, n)
