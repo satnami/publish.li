@@ -25,7 +25,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/Machiel/slugify"
@@ -65,9 +64,7 @@ func apiPut(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 
 		// check that the title has something in it (other than whitespace)
-		rawTitle := page.Title
-
-		slug := slugify.Slugify(rawTitle)
+		slug := slugify.Slugify(page.Title)
 		if slug == "" {
 			sendError(w, "Provide a title")
 			return
@@ -140,11 +137,8 @@ func apiPost(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// check that the title has something in it (other than whitespace)
-		rawTitle := page.Title
-		replacer := strings.NewReplacer(" ", "", "\t", "", "\n", "", "\f", "")
-		page.Title = replacer.Replace(rawTitle)
-
-		if page.Title == "" {
+		slug := slugify.Slugify(page.Title)
+		if slug == "" {
 			sendError(w, "Provide a title")
 			return
 		}
@@ -159,7 +153,7 @@ func apiPost(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 
 		// and finally, create the HTML
 		html := blackfriday.MarkdownCommon([]byte(page.Content))
-		page.Html = template.HTML(html)
+		existPage.Html = template.HTML(html)
 
 		errIns := storePutPage(db, *existPage)
 		if errIns != nil {
