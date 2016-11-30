@@ -27,18 +27,65 @@ import (
 	"github.com/boltdb/bolt"
 )
 
-var ErrFatalNoPagesBucket = errors.New("Bucket 'pages' does not exist")
+var ErrFatalNoPageBucket = errors.New("Bucket 'page' does not exist")
+var ErrFatalNoIdBucket = errors.New("Bucket 'id' does not exist")
 
-var pagesBucket = []byte("pages")
+var pageBucketName = []byte("page")
+var idBucketName = []byte("id")
+
+func storeGetPageUsingId(db *bolt.DB, id string) (*Page, error) {
+	var p *Page
+
+	// firstly, get this Id and see if it exists
+	err := db.View(func(tx *bolt.Tx) error {
+		idBucket := tx.Bucket(idBucketName)
+		if idBucket == nil {
+			panic(ErrFatalNoIdBucket)
+		}
+
+		// get this Id
+		rawName := idBucket.Get([]byte(id))
+		if rawName == nil {
+			return nil
+		}
+
+		// now get this page
+		name := string(rawName)
+
+		pageBucket := tx.Bucket(pageBucketName)
+		if pageBucket == nil {
+			panic(ErrFatalNoPageBucket)
+		}
+
+		rawPage := pageBucket.Get([]byte(name))
+
+		// see if this exists
+		if rawPage == nil {
+			log.Printf("Not Found : %s\n", name)
+			return nil
+		}
+
+		// try and decode
+		page := Page{}
+		err := json.Unmarshal(rawPage, &page)
+		if err != nil {
+			return err
+		}
+		p = &page
+		return nil
+	})
+
+	return p, err
+}
 
 func storeGetPage(db *bolt.DB, name string) (*Page, error) {
 	var p *Page
 
 	// see if we can find this page
 	err := db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket(pagesBucket)
+		b := tx.Bucket(pageBucketName)
 		if b == nil {
-			panic(ErrFatalNoPagesBucket)
+			panic(ErrFatalNoPageBucket)
 		}
 
 		raw := b.Get([]byte(name))
@@ -64,9 +111,9 @@ func storeGetPage(db *bolt.DB, name string) (*Page, error) {
 
 func storePutPage(db *bolt.DB, page Page) error {
 	return db.Update(func(tx *bolt.Tx) error {
-		pages := tx.Bucket(pagesBucket)
-		if pages == nil {
-			panic(ErrFatalNoPagesBucket)
+		pageBucket := tx.Bucket(pageBucketName)
+		if pageBucket == nil {
+			panic(ErrFatalNoPageBucket)
 		}
 
 		// write this page out
@@ -75,9 +122,20 @@ func storePutPage(db *bolt.DB, page Page) error {
 			return errMarshal
 		}
 
-		errPutPage := pages.Put([]byte(page.Name), bytes)
+		errPutPage := pageBucket.Put([]byte(page.Name), bytes)
 		if errPutPage != nil {
 			return errPutPage
+		}
+
+		// and make sure we have an Id pointing to this name
+		idBucket := tx.Bucket(idBucketName)
+		if idBucket == nil {
+			panic(ErrFatalNoIdBucket)
+		}
+
+		errPutId := idBucket.Put([]byte(page.Id), []byte(page.Name))
+		if errPutId != nil {
+			return errPutId
 		}
 
 		return nil

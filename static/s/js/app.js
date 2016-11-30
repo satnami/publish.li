@@ -4,6 +4,7 @@ var app = new Vue({
   el   : '#app',
   data : {
     id      : null,
+    idLocal : null,
     name    : null,
     title   : '',
     author  : '',
@@ -29,12 +30,24 @@ var app = new Vue({
     },
   },
   methods: {
+    onNew: function() {
+      app.id = null
+      app.idLocal = null
+      app.name = null
+      app.title = ''
+      app.author = ''
+      app.content = ''
+      app.err = null
+      app.state = 'editing'
+    },
     onLoad: function() {
       app.state = 'loading'
       app.err   = null
 
-      var p = axios.get('/post', {
-        id : app.id,
+      var p = axios.get('/api', {
+        params : {
+          id : app.idLocal,
+        },
       })
 
       p.then(
@@ -42,11 +55,13 @@ var app = new Vue({
           console.log(resp)
           var data = resp.data
           if ( data.ok ) {
-            app.id      = data.id
-            app.name    = data.name
-            app.title   = data.title
-            app.author  = data.author
-            app.content = data.content
+            var payload = data.payload
+            app.id      = payload.id
+            app.idLocal = payload.id
+            app.name    = payload.name
+            app.title   = payload.title
+            app.author  = payload.author
+            app.content = payload.content
             app.err     = null
           }
           else {
@@ -56,7 +71,7 @@ var app = new Vue({
         },
         function(err) {
           console.log(err)
-          app.err = 'Error saving article. Please try again later.'
+          app.err = 'Error loading article. Please try again later.'
           app.state = 'editing'
         }
       )
@@ -91,8 +106,9 @@ var app = new Vue({
           var data = resp.data
           if ( data.ok ) {
             // save both the `id` and the `name`
-            app.id   = data.id
-            app.name = data.name
+            app.id      = data.id
+            app.idLocal = data.id
+            app.name    = data.name
           }
           else {
             app.err = data.msg

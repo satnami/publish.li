@@ -80,10 +80,6 @@
           </div>
           <div class="message-body">{{ err }}</div>
         </article>
-
-        <p v-if="id" class="control status">
-          <span>Secret Code : &apos;{{ id }}&apos; - keep this safe so you can re-edit this page.</span>
-        </p>
         <p class="control has-icon has-icon-right">
           <input class="input is-large" type="text" placeholder="Title" v-model="title">
           <i class="fa fa-quote-right"></i>
@@ -101,15 +97,29 @@
           ></textarea>
           <i class="fa fa-pencil" style="font-size: 21px; right: 8px; top: 8px;"></i>
         </p>
-        <p class="control status">
-          <button :class="saveButtonClass" @click="onSave">
-            Publish
-          </button>
-          <span v-if="url">
-            Page URL :
-            {{ url }}
-            (<a v-if="url" :href="url" target="_blank">Open in New Window</a>)
-          </span>
+        <div class="control is-grouped">
+          <p class="control">
+            <button :class="saveButtonClass" @click="onSave">
+              Publish
+            </button>
+            <button :class="saveButtonClass" @click="onNew">
+              Reset / New
+            </button>
+          </p>
+          <p class="control has-addons">
+            <input class="input is-medium" type="text" placeholder="Page ID" v-model="idLocal">
+            <a class="button is-primary is-medium" @click="onLoad">
+              Retrieve Page
+            </a>
+          </p>
+        </div>
+        <p v-if="url" class="is-medium">
+          Published at
+          <a :href="url">{{ name }}</a>
+          (<a :href="url" target="_blank">New Window</a>)
+        </p>
+        <p v-if="id" class="is-large">
+          Secret : {{ id }} - keep this safe so you can edit this page.
         </p>
       </div>
     </section>

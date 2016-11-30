@@ -179,47 +179,31 @@ func apiPost(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 
 func apiGet(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		page := Page{}
-
-		// Must pass a skeleton page consisting of an `Id` and a `Name`
-
-		// parse the incoming JSON request
-		decoder := json.NewDecoder(r.Body)
-		errDecode := decoder.Decode(&page)
-		if errDecode != nil {
-			log.Printf("Error: %v\n", errDecode)
-			sendError(w, "Invalid JSON")
-			return
-		}
-		defer r.Body.Close()
+		// get this Id from the incoming params
+		id := r.FormValue("id")
+		log.Printf("looking up id=%s\n", id)
 
 		// retrieve this page
-		existPage, errGet := storeGetPage(db, page.Name)
+		page, errGet := storeGetPageUsingId(db, id)
 		if errGet != nil {
 			log.Printf("Error: %v\n", errGet)
 			sendError(w, "Internal Error. Please try again later.")
 			return
 		}
 
-		if existPage == nil {
+		if page == nil {
 			sendError(w, "This page name does not exist.")
 			return
 		}
 
-		// check that this page has this Id
-		if existPage.Id != page.Id {
-			sendError(w, "Permission denied.")
-			return
-		}
-
 		data := struct {
-			Ok   bool   `json:"ok"`
-			Msg  string `json:"msg"`
-			Data *Page
+			Ok      bool   `json:"ok"`
+			Msg     string `json:"msg"`
+			Payload *Page  `json:"payload"`
 		}{
-			Ok:   true,
-			Msg:  "Saved",
-			Data: existPage,
+			Ok:      true,
+			Msg:     "Saved",
+			Payload: page,
 		}
 
 		sendJson(w, data)

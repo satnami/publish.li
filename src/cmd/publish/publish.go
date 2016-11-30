@@ -39,8 +39,17 @@ func main() {
 	defer db.Close()
 
 	errUpdate := db.Update(func(tx *bolt.Tx) error {
-		_, err := tx.CreateBucketIfNotExists(pagesBucket)
-		return err
+		_, err1 := tx.CreateBucketIfNotExists(pageBucketName)
+		if err1 != nil {
+			return err1
+		}
+
+		_, err2 := tx.CreateBucketIfNotExists(idBucketName)
+		if err2 != nil {
+			return err2
+		}
+
+		return nil
 	})
 	check(errUpdate)
 
