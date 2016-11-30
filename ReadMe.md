@@ -11,7 +11,7 @@ To edit, you will need the Unique ID shown at the top of the page.
 
 [Andrew Chilton](https://chilts.org), [@andychilton](https://twitter.com/andychilton).
 
-For [AppsAttic](https://appsattic.com).
+For [AppsAttic](https://appsattic.com), [@AppsAttic](https://twitter.com/AppsAttic).
 
 ## License ##
 
