@@ -30,6 +30,7 @@ import (
 
 	"github.com/Machiel/slugify"
 	"github.com/boltdb/bolt"
+	"github.com/russross/blackfriday"
 )
 
 var tmpl *template.Template
@@ -78,6 +79,10 @@ func apiPut(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 		page.Name = slug + "-" + randStr(8)
 		page.Inserted = now
 		page.Updated = now
+
+		// and finally, create the HTML
+		html := blackfriday.MarkdownCommon([]byte(page.Content))
+		page.Html = template.HTML(html)
 
 		errIns := storePutPage(db, page)
 		if errIns != nil {
@@ -151,6 +156,10 @@ func apiPost(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 		existPage.Author = page.Author
 		existPage.Content = page.Content
 		existPage.Updated = now
+
+		// and finally, create the HTML
+		html := blackfriday.MarkdownCommon([]byte(page.Content))
+		page.Html = template.HTML(html)
 
 		errIns := storePutPage(db, *existPage)
 		if errIns != nil {

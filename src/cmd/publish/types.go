@@ -17,14 +17,18 @@
 
 package main
 
-import "time"
+import (
+	"html/template"
+	"time"
+)
 
 type Page struct {
-	Id       string    `json:"id"`       // e.g. "aoAAhc5i4bmKMSZk"
-	Name     string    `json:"name"`     // e.g. "first-post-chzc9BkU
-	Title    string    `json:"title"`    // e.g. "First Post"
-	Author   string    `json:"author"`   // e.g. "Andrew Chilton"
-	Content  string    `json:"content"`  // e.g. "My story."
-	Inserted time.Time `json:"inserted"` // i.e. The inserted time
-	Updated  time.Time `json:"updated"`  // i.e. The updated time
+	Id       string        `json:"id"`       // e.g. "aoAAhc5i4bmKMSZk"
+	Name     string        `json:"name"`     // e.g. "first-post-chzc9BkU
+	Title    string        `json:"title"`    // e.g. "First Post"
+	Author   string        `json:"author"`   // e.g. "Andrew Chilton"
+	Content  string        `json:"content"`  // e.g. "My story."
+	Html     template.HTML `json:"html"`     // i.e. the transformed Markdown into HTML
+	Inserted time.Time     `json:"inserted"` // i.e. The inserted time
+	Updated  time.Time     `json:"updated"`  // i.e. The updated time
 }
