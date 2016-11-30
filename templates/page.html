@@ -77,7 +77,11 @@
         <article>
           <header>
             <h1 class="title is-1">{{ .Title }}</h1>
-            <h3 class="subtitle is-3">By {{ .Author }}</h3>
+            <h3 class="subtitle is-3">
+              {{ .Author }}
+              &bull;
+              {{ .Inserted.Format "02 Jan 2006" }}
+            </h3>
           </header>
           <div class="content">{{ .Html }}</div>
         </article>
