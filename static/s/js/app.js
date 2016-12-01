@@ -23,7 +23,10 @@ var app = new Vue({
   computed : {
     url : function() {
       if ( this.name ) {
-        return 'https://publish.li/' + this.name
+        if ( typeof document.location.origin === 'undefined') {
+          document.location.origin = document.location.protocol + '//' + document.location.host;
+        }
+        return document.location.origin + '/' + this.name
       }
       return null
     },
