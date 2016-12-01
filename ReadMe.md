@@ -1,6 +1,6 @@
 # publish.li #
 
-"Publish your articles with ease."
+"Publish Your Articles Quickly and Easily."
 
 A simple publishing site much like [Medium](http://medium.com/) or [telegra.ph](http://telegra.ph/). No need to sign up
 or log in - just type your content and hit publish!
