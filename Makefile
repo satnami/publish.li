@@ -8,7 +8,7 @@ build: fmt
 	gb build all
 
 publish: build
-	PORT=9896 ./bin/publish
+	BASE_URL=http://localhost:9896 PORT=9896 ./bin/publish
 
 test:
 	gb test -v

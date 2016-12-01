@@ -21,10 +21,12 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"html"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/Machiel/slugify"
@@ -32,9 +34,12 @@ import (
 	"github.com/russross/blackfriday"
 )
 
+var baseUrl string
 var tmpl *template.Template
 
 func init() {
+	baseUrl = os.Getenv("BASE_URL")
+
 	tmpl1, err := template.ParseGlob("./templates/*.html")
 	if err != nil {
 		log.Fatal(err)
@@ -261,6 +266,21 @@ func servePage(w http.ResponseWriter, r *http.Request, db *bolt.DB) {
 	render(w, "page.html", page)
 }
 
+func sitemap(w http.ResponseWriter, r *http.Request, baseUrl string, db *bolt.DB) {
+	w.Header().Set("Content-Type", "text/plain")
+	fmt.Fprintf(w, baseUrl+"/\n")
+
+	// loop through all the pages
+	err := storeIteratePages(db, func(k, v []byte) error {
+		fmt.Fprintf(w, "%s/%s\n", baseUrl, string(k))
+		return nil
+	})
+
+	if err != nil {
+		log.Printf("Error: %v", err)
+	}
+}
+
 func homeHandler(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		path := r.URL.Path
@@ -275,6 +295,9 @@ func homeHandler(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 
 		} else if path == "/robots.txt" {
 			http.ServeFile(w, r, "static/robots.txt")
+
+		} else if path == "/sitemap.txt" {
+			sitemap(w, r, baseUrl, db)
 
 		} else {
 			servePage(w, r, db)

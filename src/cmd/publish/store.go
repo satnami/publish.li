@@ -33,6 +33,23 @@ var ErrFatalNoIdBucket = errors.New("Bucket 'id' does not exist")
 var pageBucketName = []byte("page")
 var idBucketName = []byte("id")
 
+func storeIteratePages(db *bolt.DB, fn func(k, v []byte) error) error {
+	return db.View(func(tx *bolt.Tx) error {
+		// get the page bucket
+		pageBucket := tx.Bucket(pageBucketName)
+		if pageBucket == nil {
+			panic(ErrFatalNoPageBucket)
+		}
+
+		// now, iterate over every page
+		if err := pageBucket.ForEach(fn); err != nil {
+			return err
+		}
+
+		return nil
+	})
+}
+
 func storeGetPageUsingId(db *bolt.DB, id string) (*Page, error) {
 	var p *Page
 
