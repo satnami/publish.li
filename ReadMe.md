@@ -1,11 +1,37 @@
 # publish.li #
 
-"Publish your posts with ease."
+"Publish your articles with ease."
 
-A simple publishing site much like [Medium](http://medium.com/) or [telegra.ph](http://telegra.ph/). You don't need to
-sign up or log in - just type your post and hit publish!
+A simple publishing site much like [Medium](http://medium.com/) or [telegra.ph](http://telegra.ph/). No need to sign up
+or log in - just type your content and hit publish!
 
 To edit, you will need the Unique ID shown at the top of the page.
+
+Please see [alternatives to publish.li](https://alternativeto.net/software/publish-li/).
+
+## Deploying to your Own Server ##
+
+This project uses the excellent [gb](https://getgb.io/) as it's build tool. Here's a quickstart:
+
+1. clone the repo, with `git clone github.com/appsattic/publish.li.git`
+2. run `gb build` in the project root
+3. run `./bin/publish` in the project root
+
+When you run it, provide one env var called `PORT` to determine which local port the server will listen on. Run the
+`./bin/publish` executable with the root as the CWD so that the program can load up the templates and serve the static
+pages. It outputs to both STDIN and STDERR, so it's up to you to redirect those where appropriate.
+
+You might use a command like `PORT=8080 ./bin/server` in development.
+
+## The DataStore ##
+
+Since publish.li uses the BoltDB embedded datastore, this project won't run on PaaS solutions like Heroku or
+OpenShift. There are very few operations which use the datastore (essentially get and put) so adding another backend
+such as MongoDB or Postgres should be pretty easy. The filesystem would also be easy for self-hosted on your own server
+but would have the same problems as the BoltDB backend.
+
+Once anyone shows interest in another backend, we'll do a small refactor to use an interface in the application instead
+of a concrete type. Until then though, let's just leave it as-is.
 
 ## Author ##
 
