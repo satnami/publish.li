@@ -84,10 +84,41 @@
           <input class="input is-large" type="text" placeholder="Title" v-model="title">
           <i class="fa fa-quote-right"></i>
         </p>
-        <p class="control has-icon has-icon-right">
-          <input class="input is-medium" type="text" placeholder="Author" v-model="author">
-          <i class="fa fa-user"></i>
+        <div class="control is-grouped">
+          <p class="control is-expanded has-icon has-icon-right">
+            <input class="input is-medium" type="text" placeholder="Your Name" v-model="author">
+            <i class="fa fa-user"></i>
+          </p>
+          <p class="control is-expanded has-icon has-icon-right">
+            <input class="input is-medium" type="text" placeholder="https://..." v-model="website">
+            <i class="fa fa-link"></i>
+          </p>
+        </div>
+        <p v-if="!showSocial" class="control">
+          <a class="button is-primary is-medium" @click="onShowSocial">
+            Add Social Links
+          </a>
         </p>
+        <div v-if="showSocial" class="control is-grouped">
+          <p class="control is-expanded has-icon has-icon-right">
+            <input class="input is-medium" type="text" placeholder="twitter handle" v-model="twitter">
+            <i class="fa fa-twitter"></i>
+          </p>
+          <p class="control is-expanded has-icon has-icon-right">
+            <input class="input is-medium" type="text" placeholder="facebook handle" v-model="facebook">
+            <i class="fa fa-facebook"></i>
+          </p>
+        </div>
+        <div v-if="showSocial" class="control is-grouped">
+          <p class="control is-expanded has-icon has-icon-right">
+            <input class="input is-medium" type="text" placeholder="github handle" v-model="github">
+            <i class="fa fa-github"></i>
+          </p>
+          <p class="control is-expanded has-icon has-icon-right">
+            <input class="input is-medium" type="text" placeholder="instagram handle" v-model="instagram">
+            <i class="fa fa-instagram"></i>
+          </p>
+        </div>
         <p class="control has-icon has-icon-right">
           <textarea
             id="content"

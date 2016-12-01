@@ -79,10 +79,20 @@
           <header>
             <h1 class="title is-1">{{ .Title }}</h1>
             <h3 class="subtitle is-3">
+              By
+              {{ if .Website }}
+              <a href="{{ .Website }}">{{ .Author }}</a>
+              {{ else }}
               {{ .Author }}
-              &bull;
-              {{ .Inserted.Format "02 Jan 2006" }}
+              {{ end }}
+              {{ with .Twitter }}<a href="https://twitter.com/{{ . }}"><i class="fa fa-twitter"></i></a>{{ end }}
+              {{ with .Facebook }}<a href="https://facebook.com/{{ . }}"><i class="fa fa-facebook"></i></a>{{ end }}
+              {{ with .GitHub }}<a href="https://github.com/{{ . }}"><i class="fa fa-github"></i></a>{{ end }}
+              {{ with .Instagram }}<a href="https://instagram.com/{{ . }}/"><i class="fa fa-instagram"></i></a>{{ end }}
             </h3>
+            <h5 class="subtitle is-5" style="margin-top: -15px;">
+              On {{ .Inserted.Format "02 Jan 2006" }}
+            </h5>
           </header>
           <div class="content" style="margin: 30px 0;">{{ .Html }}</div>
         </article>

@@ -23,12 +23,17 @@ import (
 )
 
 type Page struct {
-	Id       string        `json:"id"`       // e.g. "aoAAhc5i4bmKMSZk"
-	Name     string        `json:"name"`     // e.g. "first-post-chzc9BkU
-	Title    string        `json:"title"`    // e.g. "First Post"
-	Author   string        `json:"author"`   // e.g. "Andrew Chilton"
-	Content  string        `json:"content"`  // e.g. "My story."
-	Html     template.HTML `json:"html"`     // i.e. the transformed Markdown into HTML
-	Inserted time.Time     `json:"inserted"` // i.e. The inserted time
-	Updated  time.Time     `json:"updated"`  // i.e. The updated time
+	Id        string        `json:"id"`        // e.g. "aoAAhc5i4bmKMSZk"
+	Name      string        `json:"name"`      // e.g. "first-post-chzc9BkU
+	Title     string        `json:"title"`     // e.g. "First Post"
+	Author    string        `json:"author"`    // e.g. "Andrew Chilton"
+	Website   string        `json:"website"`   // e.g. "https://chilts.org"
+	Twitter   string        `json:"twitter"`   // e.g. "andychilton"
+	Facebook  string        `json:"facebook"`  // e.g. "andrew.peter.chilton"
+	GitHub    string        `json:"github"`    // e.g. "chilts"
+	Instagram string        `json:"instagram"` // e.g. "thechilts"
+	Content   string        `json:"content"`   // e.g. "My story."
+	Html      template.HTML `json:"html"`      // i.e. the transformed Markdown into HTML
+	Inserted  time.Time     `json:"inserted"`  // i.e. The inserted time
+	Updated   time.Time     `json:"updated"`   // i.e. The updated time
 }

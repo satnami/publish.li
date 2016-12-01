@@ -153,6 +153,11 @@ func apiPost(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 		now := time.Now()
 		existPage.Title = page.Title
 		existPage.Author = page.Author
+		existPage.Website = page.Website
+		existPage.Twitter = page.Twitter
+		existPage.Facebook = page.Facebook
+		existPage.GitHub = page.GitHub
+		existPage.Instagram = page.Instagram
 		existPage.Content = page.Content
 		existPage.Updated = now
 

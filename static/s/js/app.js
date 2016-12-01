@@ -3,16 +3,22 @@
 var app = new Vue({
   el   : '#app',
   data : {
-    id        : null,
-    idLocal   : null,
-    name      : null,
-    title     : '',
-    author    : '',
-    content   : '',
-    err       : null,
-    state     : 'editing',
-    isEditing : true,
-    isLoading : false,
+    id         : null,
+    idLocal    : null,
+    name       : null,
+    title      : '',
+    author     : '',
+    website    : '',
+    content    : '',
+    err        : null,
+    state      : 'editing',
+    isEditing  : true,
+    isLoading  : false,
+    showSocial : false,
+    twitter    : '',
+    facebook   : '',
+    github     : '',
+    instagram  : '',
   },
   watch: {
     state : function(newState, oldState) {
@@ -47,9 +53,17 @@ var app = new Vue({
       app.name = null
       app.title = ''
       app.author = ''
+      app.website = ''
+      app.twitter = ''
+      app.facebook = ''
+      app.github = ''
+      app.instagram = ''
       app.content = ''
       app.err = null
       app.state = 'editing'
+    },
+    onShowSocial : function() {
+      app.showSocial = true
     },
     onLoad : function() {
       app.state = 'loading'
@@ -65,14 +79,19 @@ var app = new Vue({
         function (resp) {
           var data = resp.data
           if ( data.ok ) {
-            var payload = data.payload
-            app.id      = payload.id
-            app.idLocal = payload.id
-            app.name    = payload.name
-            app.title   = payload.title
-            app.author  = payload.author
-            app.content = payload.content
-            app.err     = null
+            var payload   = data.payload
+            app.id        = payload.id
+            app.idLocal   = payload.id
+            app.name      = payload.name
+            app.title     = payload.title
+            app.author    = payload.author
+            app.website   = payload.website
+            app.twitter   = payload.twitter
+            app.facebook  = payload.facebook
+            app.github    = payload.github
+            app.instagram = payload.instagram
+            app.content   = payload.content
+            app.err       = null
           }
           else {
             app.err = data.msg
@@ -88,9 +107,14 @@ var app = new Vue({
     onSave : function() {
       var method
       var data = {
-        title   : app.title,
-        author  : app.author,
-        content : app.content,
+        title     : app.title,
+        author    : app.author,
+        website   : app.website,
+        twitter   : app.twitter,
+        facebook  : app.facebook,
+        github    : app.github,
+        instagram : app.instagram,
+        content   : app.content,
       }
 
       if ( app.name ) {
