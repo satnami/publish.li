@@ -13,7 +13,7 @@ Please see [alternatives to publish.li](https://alternativeto.net/software/publi
 
 This project uses the excellent [gb](https://getgb.io/) as it's build tool. Here's a quickstart:
 
-1. clone the repo, with `git clone github.com/appsattic/publish.li.git`
+1. clone the repo, with `git clone git@github.com:appsattic/publish.li.git`
 2. run `gb build` in the project root
 3. run `./bin/publish` in the project root
 
