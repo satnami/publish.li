@@ -25,7 +25,7 @@ When you run it, you must provide two environment variables:
 Run the `./bin/publish` executable from the project root, so that the program can load up the templates and serve the
 static pages. It outputs to both STDIN and STDERR, so it's up to you to redirect those where appropriate.
 
-You might use a command like `BASE_URL=http://localhost:8080 PORT=8080 ./bin/server` in development.
+You might use a command like `BASE_URL=http://localhost:8080 PORT=8080 ./bin/publish` in development.
 
 ## The DataStore ##
 
