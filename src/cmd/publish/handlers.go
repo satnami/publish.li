@@ -40,7 +40,7 @@ var tmpl *template.Template
 func init() {
 	baseUrl = os.Getenv("BASE_URL")
 
-	tmpl1, err := template.ParseGlob("./templates/*.html")
+	tmpl1, err := template.New("").Delims("[[", "]]").ParseGlob("./templates/*.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -268,7 +268,14 @@ func servePage(w http.ResponseWriter, r *http.Request, db *bolt.DB) {
 	}
 
 	// serve the page
-	render(w, "page.html", page)
+	data := struct {
+		Layout string
+		Page   *Page
+	}{
+		"page",
+		page,
+	}
+	render(w, "page.html", data)
 }
 
 func sitemap(w http.ResponseWriter, r *http.Request, baseUrl string, db *bolt.DB) {
@@ -293,7 +300,13 @@ func homeHandler(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 
 		// simple routing instead of using a complicated router (until we need one)
 		if path == "/" {
-			http.ServeFile(w, r, "./static/index.html")
+			// serve the page
+			data := struct {
+				Layout string
+			}{
+				"home",
+			}
+			render(w, "home.html", data)
 
 		} else if path == "/favicon.ico" {
 			http.ServeFile(w, r, "static/favicon.ico")

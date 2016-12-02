@@ -1,0 +1,94 @@
+[[ template "header.html" . ]]
+
+  <div id="app" class="container">
+
+    <article v-if="err" class="message is-danger">
+      <div class="message-header">
+        Error
+      </div>
+      <div class="message-body">{{ err }}</div>
+    </article>
+    <p class="control has-icon has-icon-right">
+      <input class="input is-large" type="text" placeholder="Title" v-model="title">
+      <i class="fa fa-quote-right"></i>
+    </p>
+    <div class="control is-grouped">
+      <p class="control is-expanded has-icon has-icon-right">
+        <input class="input is-medium" type="text" placeholder="Your Name" v-model="author">
+        <i class="fa fa-user"></i>
+      </p>
+      <p class="control is-expanded has-icon has-icon-right">
+        <input class="input is-medium" type="text" placeholder="https://..." v-model="website">
+        <i class="fa fa-link"></i>
+      </p>
+    </div>
+    <p v-if="!showSocial" class="control">
+      <a class="button is-primary is-medium" @click="onShowSocial">
+        Add Social Links
+      </a>
+    </p>
+    <div v-if="showSocial" class="control is-grouped">
+      <p class="control is-expanded has-icon has-icon-right">
+        <input class="input is-medium" type="text" placeholder="twitter handle" v-model="twitter">
+        <i class="fa fa-twitter"></i>
+      </p>
+      <p class="control is-expanded has-icon has-icon-right">
+        <input class="input is-medium" type="text" placeholder="facebook handle" v-model="facebook">
+        <i class="fa fa-facebook"></i>
+      </p>
+    </div>
+    <div v-if="showSocial" class="control is-grouped">
+      <p class="control is-expanded has-icon has-icon-right">
+        <input class="input is-medium" type="text" placeholder="github handle" v-model="github">
+        <i class="fa fa-github"></i>
+      </p>
+      <p class="control is-expanded has-icon has-icon-right">
+        <input class="input is-medium" type="text" placeholder="instagram handle" v-model="instagram">
+        <i class="fa fa-instagram"></i>
+      </p>
+    </div>
+    <p class="control has-icon has-icon-right">
+      <textarea
+        id="content"
+        class="textarea is-medium"
+        placeholder="Write your article ..."
+        v-model="content"
+      ></textarea>
+      <i class="fa fa-pencil" style="font-size: 21px; right: 8px; top: 8px;"></i>
+    </p>
+    <p class="control has-addons has-addons-right">
+      <input class="input is-medium" type="text" placeholder="Page ID" v-model="idLocal">
+      <a class="button is-primary is-medium" @click="onLoad">
+        Retrieve Page
+      </a>
+    </p>
+    <div class="control is-grouped">
+      <p class="control">
+        <button
+          class="button is-success is-medium"
+          v-bind:class="{ 'is-disabled' : isLoading, 'is-loading' : isLoading }"
+          @click="onSave"
+        >
+          Publish
+        </button>
+        <button
+          class="button is-success is-medium"
+          v-bind:class="{ 'is-disabled' : isLoading, 'is-loading' : isLoading }"
+          @click="onNew"
+        >
+          Reset / New
+        </button>
+      </p>
+    </div>
+    <p v-if="url" class="is-medium">
+      Published at
+      <a :href="url">{{ name }}</a>
+      (<a :href="url" target="_blank">New Window</a>)
+    </p>
+    <p v-if="id" class="is-large">
+      Secret : {{ id }} - keep this safe so you can edit this page.
+    </p>
+
+  </div>
+
+[[ template "footer.html" . ]]
