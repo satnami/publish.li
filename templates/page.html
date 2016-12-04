@@ -8,14 +8,14 @@
         <h3 class="subtitle is-3">
           By
           [[ if .Page.Website ]]
-          <a href="[[ .Page.Website ]]">[[ .Page.Author ]]</a>
+          <a rel="nofollow" href="[[ .Page.Website ]]">[[ .Page.Author ]]</a>
           [[ else ]]
           [[ .Page.Author ]]
           [[ end ]]
-          [[ with .Page.Twitter ]]<a href="https://twitter.com/[[ . ]]"><i class="fa fa-twitter"></i></a>[[ end ]]
-          [[ with .Page.Facebook ]]<a href="https://facebook.com/[[ . ]]"><i class="fa fa-facebook"></i></a>[[ end ]]
-          [[ with .Page.GitHub ]]<a href="https://github.com/[[ . ]]"><i class="fa fa-github"></i></a>[[ end ]]
-          [[ with .Page.Instagram ]]<a href="https://instagram.com/[[ . ]]/"><i class="fa fa-instagram"></i></a>[[ end ]]
+          [[ with .Page.Twitter ]]<a rel="nofollow" href="https://twitter.com/[[ . ]]"><i class="fa fa-twitter"></i></a>[[ end ]]
+          [[ with .Page.Facebook ]]<a rel="nofollow" href="https://facebook.com/[[ . ]]"><i class="fa fa-facebook"></i></a>[[ end ]]
+          [[ with .Page.GitHub ]]<a rel="nofollow" href="https://github.com/[[ . ]]"><i class="fa fa-github"></i></a>[[ end ]]
+          [[ with .Page.Instagram ]]<a rel="nofollow" href="https://instagram.com/[[ . ]]/"><i class="fa fa-instagram"></i></a>[[ end ]]
         </h3>
         <h5 class="subtitle is-5" style="margin-top: -15px;">
           On [[ .Page.Inserted.Format "02 Jan 2006" ]]
