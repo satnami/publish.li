@@ -93,16 +93,18 @@ func apiPut(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		data := struct {
-			Ok   bool   `json:"ok"`
-			Msg  string `json:"msg"`
-			Id   string `json:"id"`
-			Name string `json:"name"`
+			Ok      bool              `json:"ok"`
+			Msg     string            `json:"msg"`
+			Payload map[string]string `json:"payload"`
 		}{
-			Ok:   true,
-			Msg:  "Saved",
-			Id:   page.Id,
-			Name: page.Name,
+			Ok:      true,
+			Msg:     "Saved",
+			Payload: make(map[string]string),
 		}
+		data.Payload["id"] = page.Id
+		data.Payload["name"] = page.Name
+
+		fmt.Printf("data=%#v\n", data)
 
 		sendJson(w, data)
 	}
@@ -172,16 +174,18 @@ func apiPost(db *bolt.DB) func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		data := struct {
-			Ok   bool   `json:"ok"`
-			Msg  string `json:"msg"`
-			Id   string `json:"id"`
-			Name string `json:"name"`
+			Ok      bool              `json:"ok"`
+			Msg     string            `json:"msg"`
+			Payload map[string]string `json:"payload"`
 		}{
-			Ok:   true,
-			Msg:  "Saved",
-			Id:   page.Id,
-			Name: page.Name,
+			Ok:      true,
+			Msg:     "Saved",
+			Payload: make(map[string]string),
 		}
+		data.Payload["id"] = page.Id
+		data.Payload["name"] = page.Name
+
+		fmt.Printf("data=%#v\n", data)
 
 		sendJson(w, data)
 	}
