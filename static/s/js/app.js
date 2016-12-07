@@ -1,13 +1,26 @@
 // --------------------------------------------------------------------------------------------------------------------
 
-function ajax(method, path, params, callback) {
+function ajax(method, url, data, callback) {
   if ( method !== 'get' && method !== 'post' && method !== 'put' ) {
     setTimeout(function() {
       callback(new Error("Method should be get, post, or put"))
     }, 0)
   }
 
-  axios[method](path, params)
+  var request = {
+    method : method,
+    url : url,
+  }
+
+  if ( method === 'get' ) {
+    request.params = data
+  }
+  else {
+    // post and put
+    request.data = data
+  }
+
+  axios(request)
     .then(function (resp) {
       console.log('resp:', resp)
       var data = resp.data
@@ -98,10 +111,10 @@ var app = new Vue({
       app.state = 'loading'
       app.err   = null
 
-      var params = {
+      var data = {
         id : app.idLocal,
       }
-      ajax('get', '/api', params, function(err, payload) {
+      ajax('get', '/api', data, function(err, payload) {
         // whether there is an error or not, set back to editing
         app.state = 'editing'
 
